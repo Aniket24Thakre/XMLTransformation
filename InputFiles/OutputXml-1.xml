@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><BreakFastMenu>
+    <FoodType>
+        <FoodItem>Belgian Waffles</FoodItem>
+        <FoodItem>Strawberry Belgian Waffles</FoodItem>
+        <FoodItem>Berry-Berry Belgian Waffles</FoodItem>
+        <FoodItem>French Toast</FoodItem>
+        <FoodItem>Homestyle Breakfast</FoodItem>
+    </FoodType>
+    <FoodPrice>
+        <FoodItemPrice>$5.95</FoodItemPrice>
+        <FoodItemPrice>$7.95</FoodItemPrice>
+        <FoodItemPrice>$8.95</FoodItemPrice>
+        <FoodItemPrice>$4.50</FoodItemPrice>
+        <FoodItemPrice>$6.95</FoodItemPrice>
+    </FoodPrice>
+</BreakFastMenu>
