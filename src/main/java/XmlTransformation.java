@@ -6,25 +6,45 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.Scanner;
 
 public class XmlTransformation {
-     public static void main (String [] args) throws IOException, TransformerException {
-         File inputXsltFile = new File("InputFiles\\InputXslt.xsl");
-         File inputXmlFile = new File("InputFiles\\InputXml.xml");
-         OutputStream outputXML = new FileOutputStream("InputFiles\\OutputXml.xml");
-         StreamSource xmlStream = new StreamSource(inputXmlFile);
-         Result res = new StreamResult(outputXML);
-         try {
-             TransformerFactory factory = TransformerFactory.newInstance();
-             Transformer transform = factory.newTransformer(new StreamSource(inputXsltFile));
-             transform.transform(xmlStream, res);
-         }
-         finally {
-             outputXML.close();
-         }
-     }
+    public static void main (String [] args) throws IOException{
+        File inputXsltFile;
+        FileInputStream inputXmlFile = null;
+        OutputStream outputXML;
+        String filesPath ="C:\\Users\\aniket.thakre\\Task\\XML-To-XML-Transform\\";
+
+        System.out.println("Enter InputXsltFile Name");
+        Scanner inputXsltfile = new Scanner(new InputStreamReader(System.in));
+        String xsltFileName = inputXsltfile.nextLine();
+
+        System.out.println("Enter InputXMLFile Name");
+        Scanner inputXMLFilename = new Scanner(new InputStreamReader(System.in));
+        String xmlFileName = inputXMLFilename.nextLine();
+
+        System.out.println("Enter OutputXMLFile Name");
+        Scanner outputXMLFilename = new Scanner(new InputStreamReader(System.in));
+        String outXmlFileName = outputXMLFilename.nextLine();
+        outputXML = new FileOutputStream(filesPath+outXmlFileName);
+
+        Result res = new StreamResult(outputXML);
+        try {
+            inputXsltFile = new File(filesPath+xsltFileName);
+            inputXmlFile = new FileInputStream(filesPath+xmlFileName);
+            StreamSource xmlStream = new StreamSource(inputXmlFile);
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transform = factory.newTransformer(new StreamSource(inputXsltFile));
+            transform.transform(xmlStream, res);
+        }
+        catch (TransformerException | FileNotFoundException exception){
+            exception.printStackTrace();
+        }
+        finally {
+            inputXmlFile.close();
+            outputXML.close();
+        }
+    }
 }
+
