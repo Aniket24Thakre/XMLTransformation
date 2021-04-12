@@ -7,14 +7,16 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class XmlTransformation {
+    private static final String FOLDER_PATH = "File_Location";
+    private static final String PROPERTY_FILE_LOCATION ="resources\\config.properties";
     public static void main (String [] args) throws IOException{
         File inputXsltFile;
-        FileInputStream inputXmlFile = null;
-        OutputStream outputXML;
-        String filesPath ="C:\\Users\\aniket.thakre\\Task\\XML-To-XML-Transform\\";
+        Result result = null;
+        String filesPath = null;
 
         System.out.println("Enter InputXsltFile Name");
         Scanner inputXsltfile = new Scanner(new InputStreamReader(System.in));
@@ -27,23 +29,26 @@ public class XmlTransformation {
         System.out.println("Enter OutputXMLFile Name");
         Scanner outputXMLFilename = new Scanner(new InputStreamReader(System.in));
         String outXmlFileName = outputXMLFilename.nextLine();
-        outputXML = new FileOutputStream(filesPath+outXmlFileName);
 
-        Result res = new StreamResult(outputXML);
-        try {
-            inputXsltFile = new File(filesPath+xsltFileName);
-            inputXmlFile = new FileInputStream(filesPath+xmlFileName);
-            StreamSource xmlStream = new StreamSource(inputXmlFile);
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transform = factory.newTransformer(new StreamSource(inputXsltFile));
-            transform.transform(xmlStream, res);
-        }
-        catch (TransformerException | FileNotFoundException exception){
-            exception.printStackTrace();
-        }
-        finally {
-            inputXmlFile.close();
-            outputXML.close();
+        Properties getProperties = new Properties();
+        try(InputStream inputStream = new FileInputStream(PROPERTY_FILE_LOCATION)){
+            if(inputStream !=null){
+                getProperties.load(inputStream);
+                filesPath = getProperties.getProperty(FOLDER_PATH);
+            }else {
+                throw new FileNotFoundException("Properties file not found");
+            }
+            try (FileInputStream inputXmlFile = new FileInputStream(filesPath+"\\"+xmlFileName);
+                 OutputStream outputXML = new FileOutputStream(filesPath+"\\"+outXmlFileName)){
+                inputXsltFile = new File(filesPath + "\\" + xsltFileName);
+                StreamSource xmlStream = new StreamSource(inputXmlFile);
+                TransformerFactory factory = TransformerFactory.newInstance();
+                Transformer transform = factory.newTransformer(new StreamSource(inputXsltFile));
+                result = new StreamResult(outputXML);
+                transform.transform(xmlStream, result);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }
